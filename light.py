@@ -5,7 +5,7 @@ from phue import Bridge
 import sounddevice as sd
 import numpy as np
 
-b = Bridge('192.168.2.197')
+b = Bridge('<ip of bridge>')
 # This line is called only used once to register with the Philips Hue Bridge.
 # b.connect()
 lights = b.get_light_objects("list")
