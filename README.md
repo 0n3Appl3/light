@@ -6,4 +6,4 @@ Currently in development.
 ![Screenshot of the Light application](https://imgur.com/XKyE8XG.png)
 
 ###### This is just a side project.
-###### Copyright © 2021 Jedd Lupoy (0n3Appl3)
+###### Property of Jedd Lupoy (0n3Appl3)
