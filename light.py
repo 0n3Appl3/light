@@ -13,7 +13,7 @@ import numpy as np
 import threading
 
 # The bridge the application will access to control lights
-b = Bridge('192.168.2.197')
+b = Bridge('192.168.0.211')
 # This line is called only used once to register with the Philips Hue Bridge
 # b.connect()
 # Obtain the list of all lights connected to the Philips Hue bridge
@@ -63,10 +63,7 @@ def start():
         
 
 def check_if_running():
-    global light
-    global started
-    global flag
-    flag = ""
+    global light, started, flag
 
     # Create a new thread for starting light sync
     x = threading.Thread(target=start)
@@ -104,47 +101,50 @@ def which_button(button_press):
     flag = button_press
     print(flag)
 
-# Start creation of the GUI
-master = Tk()
-master.title("Light Sync")
-master.geometry("250x280")
-volume = IntVar()
-colour_setting = IntVar()
+def setup_gui():
+    global volume, colour_setting, combobox
 
-# Set the GUI theme
-style = ttk.Style(master)
-master.tk.call("source", "azure dark.tcl")
-style.theme_use('azure')
+    # Start creation of the GUI
+    master = Tk()
+    master.title("Light Sync")
+    master.geometry("250x280")
+    volume = IntVar()
+    colour_setting = IntVar()
 
-# Sound volume visualiser
-progress = ttk.Progressbar(master, value=0, length=250, variable=volume, mode='determinate')
-progress.place(x=0, y=-8)
+    # Set the GUI theme
+    style = ttk.Style(master)
+    master.tk.call("source", "azure dark.tcl")
+    style.theme_use('azure')
 
-# Title
-title = Label(master, text="Light", font=("Helvetica", 36, BOLD))
-title.place(x=10, y=15)
+    # Sound volume visualiser
+    progress = ttk.Progressbar(master, value=0, length=250, variable=volume, mode='determinate')
+    progress.place(x=0, y=-8)
 
-# Subtitle
-subtitle = Label(master, text="Visualising sound volume")
-subtitle.place(x=10, y=65)
+    # Title
+    title = Label(master, text="Light", font=("Helvetica", 36, BOLD))
+    title.place(x=10, y=15)
 
-# Combobox for selecting a light bulb
-combobox = Combobox(master, state="readonly", width=15, values=light_names)
-combobox.place(x=15, y=110)
-combobox.set(light_names[0])
+    # Subtitle
+    subtitle = Label(master, text="Visualising sound volume")
+    subtitle.place(x=10, y=65)
 
-# Toggle between two different colour modes
-switch = ttk.Checkbutton(master, text="Enable alternate colours", variable=colour_setting, style="Switch", offvalue=0, onvalue=1, command=change_colour)
-switch.place(x=15, y=160)
+    # Combobox for selecting a light bulb
+    combobox = Combobox(master, state="readonly", width=15, values=light_names)
+    combobox.place(x=15, y=110)
+    combobox.set(light_names[0])
 
-# Starts the light sync
-start_button = ttk.Button(master, text="Start", width=9, command=check_if_running)
-start_button.place(x=15, y=235)
+    # Toggle between two different colour modes
+    switch = ttk.Checkbutton(master, text="Enable alternate colours", variable=colour_setting, style="Switch", offvalue=0, onvalue=1, command=change_colour)
+    switch.place(x=15, y=160)
 
-# Stops the light sync
-stop_button = ttk.Button(master, text="Stop", width=9, command=lambda m="stop": which_button(m))
-stop_button.place(x=130, y=235)
+    # Starts the light sync
+    start_button = ttk.Button(master, text="Start", width=9, command=check_if_running)
+    start_button.place(x=15, y=235)
 
-# Show the GUI
-mainloop()
+    # Stops the light sync
+    stop_button = ttk.Button(master, text="Stop", width=9, command=lambda m="stop": which_button(m))
+    stop_button.place(x=130, y=235)
 
+if __name__ == "__main__":
+    setup_gui()
+    mainloop()
